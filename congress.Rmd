@@ -38,4 +38,3 @@ ggplot(limited_data, aes(x=termstart, y=avg_age, color = party)) +
  annotate("text", label = 'atop(bold("Democrats"))', x=as.Date("1997-01-01"), y=57, color = "#0093d5", family = "Courier New", parse = TRUE)
 ```
     
-    scale_y_continuous(labels = c("40", "45", "50", "55", "60 yrs")) + 
