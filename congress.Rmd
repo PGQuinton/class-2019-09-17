@@ -6,6 +6,36 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
+library(fivethirtyeight)
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(knitr)
+library(scales)
+library(extrafont)
+library(ggthemes)
 ```
 
+```{r}
+data("congress_age")
+
+limited_data <- congress_age %>%
+  select(party, termstart, age, congress) %>%
+  filter(party %in% c("D", "R")) %>%
+  group_by(party, congress, termstart) %>%
+  summarize(avg_age = mean(age))
+
+ggplot(limited_data, aes(x=termstart, y=avg_age, color = party)) + 
+  geom_line(size=0.9) + 
+  labs(title = "Average Age of Members of Congress", subtitle = "At start of term, 1947-2013") + 
+  expand_limits(y=c(40,60)) + 
+  scale_x_date(breaks = as.Date(c('1950-01-01', '1960-01-01', '1970-01-01', '1980-01-01', '1990-01-01', '2000-01-01', '2010-01-01')), labels = c("1950", "'60", "'70", "'80", "'90", "2000", "'10")) +
+  scale_color_fivethirtyeight() +
+  theme_fivethirtyeight() + 
+  theme(legend.position = "none") + 
+   annotate("text", label = 'atop(bold("Republicans"))', x=as.Date("1969-01-01"), y=56, color = "#fe0000", family = "Courier New", parse = TRUE) + 
+ annotate("text", label = 'atop(bold("Democrats"))', x=as.Date("1997-01-01"), y=57, color = "#0093d5", family = "Courier New", parse = TRUE)
+```
+    
+    scale_y_continuous(labels = c("40", "45", "50", "55", "60 yrs")) + 
